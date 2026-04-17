@@ -9,5 +9,7 @@ namespace Entities.Models
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string OpeningHours { get; set; } = null!;
+        public ICollection<Address> Addresses { get; set; } = [];
+        public ICollection<Product> Products { get; set; } = [];
     }
 }

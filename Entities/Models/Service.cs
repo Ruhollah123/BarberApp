@@ -11,5 +11,6 @@ namespace Entities.Models
         public string Description { get; set; } = null!;
         public string Duration { get; set; } = null!;
         public decimal Price { get; set; }
+        public ICollection<AppointmentService> AppointmentServices { get; set; } = [];
     }
 }

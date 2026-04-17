@@ -1,0 +1,18 @@
+﻿using Entities.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace EFCore.Configurations
+{
+    internal class AppointmentServiceConfiguration : IEntityTypeConfiguration<AppointmentService>
+    {
+        public void Configure(EntityTypeBuilder<AppointmentService> builder)
+        {
+
+
+        }
+    }
+}

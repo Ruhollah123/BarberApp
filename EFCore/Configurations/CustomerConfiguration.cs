@@ -16,7 +16,7 @@ namespace EFCore.Configurations
             builder.Property(c => c.Name).IsRequired().HasMaxLength(256);
             builder.Property(c => c.BirthDate).IsRequired().HasMaxLength(256);
 
-
+            builder.HasOne(c => c.Role).WithMany(r => r.Customers).HasForeignKey(c => c.RoleId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

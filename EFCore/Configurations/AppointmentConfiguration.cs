@@ -17,6 +17,7 @@ namespace EFCore.Configurations
             builder.Property(am => am.DateTime).IsRequired();
 
 
+            builder.HasOne(am => am.Customer).WithMany(c => c.Appointments).HasForeignKey(am => am.CustomerId).OnDelete(DeleteBehavior.Restrict);
 
         }
     }

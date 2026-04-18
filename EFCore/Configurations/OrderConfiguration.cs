@@ -16,7 +16,8 @@ namespace EFCore.Configurations
             builder.Property(o => o.OrderDate).IsRequired();
             builder.Property(o => o.TotalAmount).IsRequired();
 
-
+            builder.HasOne(o => o.Appointment).WithMany(am => am.Orders).HasForeignKey(o => o.AppointmentId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(o => o.PaymentAlternative).WithMany(pa => pa.Orders).HasForeignKey(o => o.PaymentAlternativeId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

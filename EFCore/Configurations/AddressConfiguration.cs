@@ -18,6 +18,9 @@ namespace EFCore.Configurations
             builder.Property(a => a.City).IsRequired().HasMaxLength(256);
 
 
+
+
+            builder.HasOne(a => a.BarberShop).WithMany(b => b.Addresses).HasForeignKey(a => a.BarberShopId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -15,6 +15,9 @@ namespace EFCore.Configurations
 
             builder.Property(p => p.Name).IsRequired().HasMaxLength(256);
             builder.Property(p => p.Price).IsRequired();
+
+            builder.HasOne(p => p.BarberShop).WithMany(bs => bs.Products).HasForeignKey(p => p.BarberShopId).OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

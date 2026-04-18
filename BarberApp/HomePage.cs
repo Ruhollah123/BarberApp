@@ -1,8 +1,4 @@
 ﻿using Entities.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BarberApp
 {
@@ -17,18 +13,14 @@ namespace BarberApp
                 switch (SelectedItem)
                 {
                     case 1:
-                        return new ChangePageRequest() { Page = "welcome"};
+                        return new ChangePageRequest() { Page = "Services" };
                     case 2:
-                        return new ChangePageRequest() { Page = "appointment-times"};
+                        return new ChangePageRequest() { Page = "Book-An-Appointment" };
                     case 3:
-                        return new ChangePageRequest() { Page = "viewing-appointments"};
+                        return new ChangePageRequest() { Page = "Buy Products" };
                     case 4:
-                        return new ChangePageRequest() { Page = "services"};
+                        return new ChangePageRequest() { Page = "Cart" };
                     case 5:
-                        return new ChangePageRequest() { Page = "Products"};
-                    case 6:
-                        return new ChangePageRequest() { Page = "Cart"};
-                    case 7:
                         if (User == null)
                         {
                             return new ChangePageRequest() { Page = "Log-in" };
@@ -39,32 +31,63 @@ namespace BarberApp
                         }
                 }
             }
+
             return null;
         }
 
         public override void Draw()
         {
-
+            int positionX = X;
+            int positionY = Y;
 
             List<string> menuContent = new List<string>()
             {
-                "1. Home",
-                "2. Book an appointment",
-                "3. View appointments",
-                "4. Services",
-                "5. Buy Products",
-                "6. Cart",
-                "7. Log in"
+                "1. Services",
+                "2. Book An Appointment",
+                "3. Buy Products",
+                "4. Cart",
+                "5. Log in"
             };
-            
 
-            Window theMenu = new Window("Menu", X, Y, menuContent);
+            Window theMenu = new("Menu", positionX, positionY, menuContent);
+
+            if (positionX + theMenu.WindowWidth > Width)
+            {
+                positionX = 0;
+                theMenu.Left = positionX;
+
+                positionY += 10;
+                theMenu.Top = positionY;
+            }
+
             theMenu.Draw();
         }
 
         public override void ManageInput()
         {
-            //var input = ConsoleKey.1;
+            SelectedItem = Console.ReadKey().KeyChar;
+            switch (SelectedItem)
+            {
+                case '1':
+                    SelectedItem = 1;
+                    ShouldChangePage = true;
+                    break;
+                case '2':
+                    ShouldChangePage = true;
+                    break;
+                case '3':
+                    ShouldChangePage = true;
+                    break;
+                case '4':
+                    ShouldChangePage = true;
+                    break;
+                case '5':
+                    ShouldChangePage = true;
+                    break;
+                default:
+                    ShouldChangePage = false;
+                    break;
+            }
         }
     }
 }

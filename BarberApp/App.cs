@@ -26,6 +26,10 @@ namespace BarberApp
                 if (Page.ShouldChangePage)
                 {
                     ChangePageRequest? request = Page.ChangePage();
+                    if (request != null)
+                    {
+                        await ChangePage(request);
+                    }
                 }
             }
         }
@@ -49,6 +53,7 @@ namespace BarberApp
 
                     Page = new HomePage();
                     break;
+
                 default:
                     break;
             }

@@ -1,4 +1,6 @@
-﻿namespace BarberApp
+﻿using System.Reflection.Metadata;
+
+namespace BarberApp
 {
     public class Window
     {

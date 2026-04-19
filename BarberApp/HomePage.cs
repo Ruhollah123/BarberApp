@@ -17,7 +17,7 @@ namespace BarberApp
                     case 2:
                         return new ChangePageRequest() { Page = "Book-An-Appointment" };
                     case 3:
-                        return new ChangePageRequest() { Page = "Buy Products" };
+                        return new ChangePageRequest() { Page = "Products" };
                     case 4:
                         return new ChangePageRequest() { Page = "Cart" };
                     case 5:
@@ -73,15 +73,19 @@ namespace BarberApp
                     ShouldChangePage = true;
                     break;
                 case '2':
+                    SelectedItem = 2;
                     ShouldChangePage = true;
                     break;
                 case '3':
+                    SelectedItem = 3;
                     ShouldChangePage = true;
                     break;
                 case '4':
+                    SelectedItem = 4;
                     ShouldChangePage = true;
                     break;
                 case '5':
+                    SelectedItem = 5;
                     ShouldChangePage = true;
                     break;
                 default:

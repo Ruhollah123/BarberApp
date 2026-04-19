@@ -40,7 +40,7 @@ namespace BarberApp
             List<string> listTitles = new() { "    === Welcome to ===", "=== The Cut-Algorithm === " };
             string longestItem = listTitles.OrderBy(s => s.Length).First();
             int x = (Console.WindowWidth - longestItem.Length) / 2 - 4;
-            Window window = new Window("", 0, 3, listTitles);
+            Window window = new Window("", 0, 0, listTitles);
             window.Draw();
             
 
@@ -58,10 +58,13 @@ namespace BarberApp
                     Page = new ServicePage();
                     break;
 
-                case "View-appointments":
-                    //Page = new AppointmentPage();
-                    break;
+                //case "View-appointments":
+                //    //Page = new AppointmentPage();
+                //    break;
 
+                case "Products":
+                    Page = new ProductsPage();
+                    break;
                 default:
 
                     break;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
@@ -8,6 +9,7 @@ namespace BarberApp
     public class App
     {
         public Page Page { get; set; }
+        public static User? CurrentUser { get; set; }
 
         public App()
         {
@@ -58,12 +60,12 @@ namespace BarberApp
                     Page = new ServicePage();
                     break;
 
-                //case "View-appointments":
-                //    //Page = new AppointmentPage();
-                //    break;
-
                 case "Products":
                     Page = new ProductsPage();
+                    break;
+
+                case "Log-in":
+                    Page = new LoginPage();
                     break;
                 default:
 

@@ -1,11 +1,8 @@
-﻿using Entities.Models;
-
-namespace BarberApp
+﻿namespace BarberApp
 {
     internal class HomePage : Page
     {
         public int SelectedItem { get; set; }
-        public User? User { get; set; }
         public override ChangePageRequest ChangePage()
         {
             if (ShouldChangePage)
@@ -21,7 +18,7 @@ namespace BarberApp
                     case 4:
                         return new ChangePageRequest() { Page = "Cart" };
                     case 5:
-                        if (User == null)
+                        if (App.CurrentUser == null)
                         {
                             return new ChangePageRequest() { Page = "Log-in" };
                         }
@@ -37,6 +34,7 @@ namespace BarberApp
 
         public override void Draw()
         {
+            //Console.Clear();
             int positionX = X;
             int positionY = Y;
 
@@ -46,8 +44,8 @@ namespace BarberApp
                 "2. Book An Appointment",
                 "3. Buy Products",
                 "4. Cart",
-                "5. Log in"
             };
+
 
             Window theMenu = new("Menu", positionX, positionY, menuContent);
 
@@ -59,6 +57,21 @@ namespace BarberApp
                 positionY += 10;
                 theMenu.Top = positionY;
             }
+
+            if (App.CurrentUser?.Customer?.Role?.Name == "admin")
+            {
+                menuContent.Add("5. Admin");
+            }
+
+            if (App.CurrentUser == null)
+            {
+                menuContent.Add("5. Log in");
+            }
+            else
+            {
+                menuContent.Add("5. Log out");
+            }
+
 
             theMenu.Draw();
         }

@@ -1,4 +1,4 @@
-﻿namespace BarberApp
+﻿namespace BarberApp.Pages
 {
     internal class HomePage : Page
     {

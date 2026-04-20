@@ -1,4 +1,4 @@
-﻿namespace BarberApp
+﻿namespace BarberApp.Pages
 {
     public abstract class Page
     {

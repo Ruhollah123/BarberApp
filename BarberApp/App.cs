@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using BarberApp.Pages;
+using Entities.Models;
 
 namespace BarberApp
 {
@@ -66,9 +67,11 @@ namespace BarberApp
 
                 case "Cart-page":
                     Page = new CartPage();
-                    switch (changePageRequest.Page)
+                    switch (changePageRequest.Action)
                     {
+                        case RequestAction.Get:
 
+                            break;
                     }
                     break;
 

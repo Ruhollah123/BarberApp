@@ -1,6 +1,6 @@
 ﻿using Entities.Models;
 
-namespace BarberApp
+namespace BarberApp.Pages
 {
     internal class LoginPage : Page
     {

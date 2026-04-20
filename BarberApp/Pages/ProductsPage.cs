@@ -1,6 +1,6 @@
 ﻿using Entities.Models;
 
-namespace BarberApp
+namespace BarberApp.Pages
 {
     internal class ProductsPage : Page
     {
@@ -42,7 +42,7 @@ namespace BarberApp
 
                 if (nextX + productsWindow.WindowWidth > Width)
                 {
-                    nextX += 29;
+                    nextX += 32;
                     nextY = 0;
                 }
 

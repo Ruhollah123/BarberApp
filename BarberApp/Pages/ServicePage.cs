@@ -1,6 +1,6 @@
 ﻿using Entities.Models;
 
-namespace BarberApp
+namespace BarberApp.Pages
 {
     internal class ServicePage : Page
     {
@@ -40,8 +40,6 @@ namespace BarberApp
             Console.Clear();
             int nextX = 0;
             int nextY = 0;
-            int paddingX = 0;
-            int paddingY = 7;
 
 
             for (int i = 0; i < Services.Count; i++)
@@ -62,8 +60,8 @@ namespace BarberApp
 
                 if (nextX + serviceWindow.WindowWidth > Width)
                 {
-                    nextX = 0;
-                    nextY += paddingY;
+                    nextX = 58;
+                    nextY += 0;
                 }
             }
 

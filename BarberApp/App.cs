@@ -1,8 +1,4 @@
 ﻿using Entities.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
 
 namespace BarberApp
 {
@@ -13,12 +9,12 @@ namespace BarberApp
 
         public App()
         {
-            
+
         }
 
         public async Task Run()
         {
-            await ChangePage(new ChangePageRequest {Page = "Home" });
+            await ChangePage(new ChangePageRequest { Page = "Home" });
 
             while (true)
             {
@@ -44,7 +40,7 @@ namespace BarberApp
             int x = (Console.WindowWidth - longestItem.Length) / 2 - 4;
             Window window = new Window("", 0, 0, listTitles);
             window.Draw();
-            
+
 
         }
 
@@ -60,8 +56,20 @@ namespace BarberApp
                     Page = new ServicePage();
                     break;
 
+                case "Booking-appointment":
+                    Page = new BookingPage();
+                    break;
+
                 case "Products":
                     Page = new ProductsPage();
+                    break;
+
+                case "Cart-page":
+                    Page = new CartPage();
+                    switch (changePageRequest.Page)
+                    {
+
+                    }
                     break;
 
                 case "Log-in":

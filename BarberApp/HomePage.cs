@@ -12,11 +12,11 @@
                     case 1:
                         return new ChangePageRequest() { Page = "Services" };
                     case 2:
-                        return new ChangePageRequest() { Page = "Book-An-Appointment" };
+                        return new ChangePageRequest() { Page = "Booking-appointment" };
                     case 3:
                         return new ChangePageRequest() { Page = "Products" };
                     case 4:
-                        return new ChangePageRequest() { Page = "Cart" };
+                        return new ChangePageRequest() { Page = "Cart-page" };
                     case 5:
                         if (App.CurrentUser == null)
                         {

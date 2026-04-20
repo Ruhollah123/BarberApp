@@ -10,9 +10,7 @@ namespace BarberApp
             new Product { Id = 1, Name = "Matte Wax Professional", Price = 189.00m },
             new Product { Id = 2, Name = "Shampoo Deep Clean 500ml", Price = 249.00m },
             new Product { Id = 3, Name = "Conditioner Silk Smooth", Price = 229.00m },
-            new Product { Id = 4, Name = "Beard Oil Sandalwood", Price = 159.00m },
-            new Product { Id = 5, Name = "Argan Oil Hair Treatment", Price = 349.00m },
-            new Product { Id = 6, Name = "Sea Salt Spray Volume", Price = 199.00m }
+            //new Product { Id = 4, Name = "Beard Oil Sandalwood", Price = 159.00m },
         };
 
         public override ChangePageRequest ChangePage()
@@ -28,13 +26,11 @@ namespace BarberApp
         {
             Console.Clear();
 
-            int nextX = 6;
+            int nextX = 0;
             int nextY = 0;
-            int windowHeight = 5;
 
             for (int i = 0; i < Products.Count; i++)
             {
-
                 List<string> showProducts = new List<string>()
                 {
                     $"{Products[i].Id}",
@@ -46,8 +42,8 @@ namespace BarberApp
 
                 if (nextX + productsWindow.WindowWidth > Width)
                 {
-                    nextX = 0;
-                    nextY += windowHeight;
+                    nextX += 29;
+                    nextY = 0;
                 }
 
                 productsWindow.Draw();

@@ -9,7 +9,6 @@ namespace BarberApp
             new Service { Id = 1, Name = "Hårklippning Standard", Description = "Klassisk klippning inklusive tvätt och styling.", Duration = "45 min", Price = 550m },
             new Service {Id = 2, Name = "Skäggtrimning", Description = "Trimning och formning av skägg med maskin och kniv.", Duration = "30 min", Price = 350m },
             new Service {Id = 3, Name = "Lyxpaket", Description = "Hårklippning och skäggtrimning samt varm handduk.", Duration = "75 min", Price = 850m },
-            new Service {Id = 4, Name = "Maskinklippning", Description = "Enkel klippning med bara maskin över hela huvudet.", Duration = "20 min", Price = 250m }
         };
 
         public bool AddMode { get; set; }
@@ -39,7 +38,7 @@ namespace BarberApp
         public override void Draw()
         {
             Console.Clear();
-            int nextX = 6;
+            int nextX = 0;
             int nextY = 0;
             int paddingX = 0;
             int paddingY = 7;
@@ -58,15 +57,14 @@ namespace BarberApp
                 };
                 Window serviceWindow = new(Services[i].Name, nextX, nextY, showInfo);
 
+                serviceWindow.Draw();
+                nextX += serviceWindow.WindowWidth + 2;
+
                 if (nextX + serviceWindow.WindowWidth > Width)
                 {
                     nextX = 0;
                     nextY += paddingY;
                 }
-
-
-                serviceWindow.Draw();
-                nextX += serviceWindow.WindowWidth + 2;
             }
 
             Console.WriteLine("Enter A to book an appointment");

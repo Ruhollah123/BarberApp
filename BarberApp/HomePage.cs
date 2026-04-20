@@ -22,10 +22,15 @@
                         {
                             return new ChangePageRequest() { Page = "Log-in" };
                         }
+                        else if (App.CurrentUser.Name == "admin")
+                        {
+                            return new ChangePageRequest() { Page = "admin" };
+                        }
                         else
                         {
                             return new ChangePageRequest() { Page = "Log-out" };
                         }
+                        break;
                 }
             }
 
@@ -69,9 +74,8 @@
             }
             else
             {
-                menuContent.Add("5. Log out");
+                menuContent.Add("6. Log out");
             }
-
 
             theMenu.Draw();
         }

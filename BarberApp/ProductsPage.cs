@@ -79,9 +79,6 @@ namespace BarberApp
                         AddMode = true;
                         ShouldChangePage = false;
                         break;
-                    case 'B':
-
-                        break;
                     case 'C':
                         AddMode = false;
                         ShouldChangePage = true;

@@ -6,7 +6,7 @@ namespace BarberApp
     {
         public override ChangePageRequest ChangePage()
         {
-            return new ChangePageRequest() { Page = "user" };
+            return new ChangePageRequest() { Page = "Home" };
         }
 
         public override void Draw()
@@ -31,7 +31,6 @@ namespace BarberApp
 
         public override void ManageInput()
         {
-            throw new NotImplementedException();
         }
     }
 }

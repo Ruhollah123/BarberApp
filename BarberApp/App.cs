@@ -67,6 +67,10 @@ namespace BarberApp
                 case "Log-in":
                     Page = new LoginPage();
                     break;
+
+                case "admin":
+                    Page = new AdminPage();
+                    break;
                 default:
 
                     break;

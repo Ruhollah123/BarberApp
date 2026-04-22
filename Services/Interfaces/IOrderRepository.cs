@@ -5,10 +5,9 @@ using System.Text;
 
 namespace Services.Interfaces
 {
-    public interface IProductService
+    public interface IOrderRepository
     {
-        Task<List<Product>> GetAllProductsAsync();
-        Task AddProductsAsync(Product productId);
+        Task AddOrderAsync(Order order);
 
     }
 }

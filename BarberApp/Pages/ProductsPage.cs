@@ -1,17 +1,23 @@
 ﻿using Entities.Models;
+using Services.Interfaces;
+using System.Runtime.InteropServices;
 
 namespace BarberApp.Pages
 {
     internal class ProductsPage : Page
     {
         public bool AddMode { get; set; }
-        public List<Product> Products { get; set; } = new List<Product>()
+        public List<Product> Products { get; set; } = new List<Product>();
+        private readonly IProductService _productService;
+        private List<Product> _products;
+
+        public ProductsPage(IProductService service, List<Product> products)
         {
-            new Product { Id = 1, Name = "Matte Wax Professional", Price = 189.00m },
-            new Product { Id = 2, Name = "Shampoo Deep Clean 500ml", Price = 249.00m },
-            new Product { Id = 3, Name = "Conditioner Silk Smooth", Price = 229.00m },
-            //new Product { Id = 4, Name = "Beard Oil Sandalwood", Price = 159.00m },
-        };
+            _productService = service;
+            _products = products;
+
+            Products = _productService.GetAllProductsAsync().Result;
+        }
 
         public override ChangePageRequest ChangePage()
         {
@@ -40,14 +46,16 @@ namespace BarberApp.Pages
 
                 Window productsWindow = new Window(Products[i].Name, nextX, nextY, showProducts);
 
+                productsWindow.Draw();
+
+                nextX += productsWindow.WindowWidth + 2;
+
                 if (nextX + productsWindow.WindowWidth > Width)
                 {
-                    nextX += 32;
-                    nextY = 0;
+                    nextX = 0;
+                    nextY += 5;
                 }
 
-                productsWindow.Draw();
-                nextX += productsWindow.WindowWidth + 2;
             }
 
             Console.WriteLine("Enter A to add products to cart");
@@ -56,12 +64,12 @@ namespace BarberApp.Pages
 
         public override void ManageInput()
         {
-            var key = Console.ReadKey().KeyChar;
+            var key = Console.ReadKey(true).KeyChar;
             if (int.TryParse(key.ToString(), out int productInput))
             {
                 productInput -= 1;
 
-                if (productInput <= Products.Count && productInput >= 0)
+                if (productInput <= Products.Count && productInput > 0)
                 {
                     ShouldChangePage = true;
                 }
@@ -72,6 +80,7 @@ namespace BarberApp.Pages
                 switch (optionChosen)
                 {
                     case 'A':
+                        SelectedProduct();
                         AddMode = true;
                         ShouldChangePage = false;
                         break;
@@ -83,6 +92,28 @@ namespace BarberApp.Pages
                         break;
                 }
             }
+        }
+
+        private void SelectedProduct()
+        {
+            Console.Write("\nChoose The Product: ");
+            if (int.TryParse(Console.ReadLine(), out int productChosen))
+            {
+                var product = Products.FirstOrDefault(p => p.Id == productChosen);
+
+                if (product != null)
+                {
+                    _products.Add(product);
+                    Console.WriteLine($"\n{product.Name} Added To Cart!");
+                }
+                else
+                {
+                    Console.WriteLine("\nProduct not found");
+                }
+            }
+
+            Console.WriteLine("Enter any key to continue!");
+            Console.ReadKey();
         }
     }
 }

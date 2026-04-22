@@ -17,6 +17,7 @@ namespace EFCore.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .UseCollation("Finnish_Swedish_CI_AS")
                 .HasAnnotation("ProductVersion", "10.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -71,6 +72,26 @@ namespace EFCore.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Appointments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CustomerId = 1,
+                            DateTime = new DateTime(2026, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CustomerId = 2,
+                            DateTime = new DateTime(2026, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CustomerId = 3,
+                            DateTime = new DateTime(2026, 5, 3, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.AppointmentService", b =>
@@ -115,6 +136,14 @@ namespace EFCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BarberShops");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "The Cut-Algorithm",
+                            OpeningHours = "Mon-Fri 09:00-18:00"
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.Customer", b =>
@@ -146,6 +175,32 @@ namespace EFCore.Migrations
                         .IsUnique();
 
                     b.ToTable("Customers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BirthDate = new DateTime(1990, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Erik Karlsson",
+                            RoleId = 2,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BirthDate = new DateTime(1985, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Anna Svensson",
+                            RoleId = 2,
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BirthDate = new DateTime(2000, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Karl Larsson",
+                            RoleId = 2,
+                            UserId = 4
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.Order", b =>
@@ -180,6 +235,32 @@ namespace EFCore.Migrations
                     b.HasIndex("PaymentAlternativeId");
 
                     b.ToTable("Orders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AppointmentId = 1,
+                            OrderDate = new DateTime(2025, 12, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentAlternativeId = 2,
+                            TotalAmount = 550m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AppointmentId = 2,
+                            OrderDate = new DateTime(2026, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentAlternativeId = 1,
+                            TotalAmount = 350m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AppointmentId = 3,
+                            OrderDate = new DateTime(2026, 3, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentAlternativeId = 2,
+                            TotalAmount = 850m
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.PaymentAlternative", b =>
@@ -197,6 +278,18 @@ namespace EFCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PaymentAlternatives");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Card-Payment"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Swish"
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.Product", b =>
@@ -222,6 +315,36 @@ namespace EFCore.Migrations
                     b.HasIndex("BarberShopId");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BarberShopId = 1,
+                            Name = "Matte Hair Wax",
+                            Price = 149.00m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BarberShopId = 1,
+                            Name = "Beard Oil Deluxe",
+                            Price = 199.00m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BarberShopId = 1,
+                            Name = "Aftershave Eucalyptus",
+                            Price = 129.00m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            BarberShopId = 1,
+                            Name = "Professional Comb",
+                            Price = 89.00m
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.Role", b =>
@@ -239,6 +362,18 @@ namespace EFCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "customer"
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.Service", b =>
@@ -267,6 +402,40 @@ namespace EFCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Services");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Classic haircut including wash.",
+                            Duration = "60 min",
+                            Name = "Classic haircut and styling",
+                            Price = 550m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Shaping with machine and razor",
+                            Duration = "60 min",
+                            Name = "Trimming and shaping of beard with machine and shears",
+                            Price = 350m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Haircut, beard, and hot towel.",
+                            Duration = "60 min",
+                            Name = "Haircut and beard trim including a hot towel treatment",
+                            Price = 850m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Simple all-over clipper cut with neck shave.",
+                            Duration = "60 min",
+                            Name = "Buzz Cut",
+                            Price = 250m
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.User", b =>
@@ -291,6 +460,36 @@ namespace EFCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Admin Bosse",
+                            UserName = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 2, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Erik Karlsson",
+                            UserName = "erik90"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Anna Svensson",
+                            UserName = "anna_s"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2026, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Karl Larsson",
+                            UserName = "kalle"
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.Address", b =>

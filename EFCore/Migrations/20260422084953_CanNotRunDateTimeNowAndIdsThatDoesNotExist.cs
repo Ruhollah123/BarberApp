@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace EFCore.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedUserEntity : Migration
+    public partial class CanNotRunDateTimeNowAndIdsThatDoesNotExist : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -231,6 +233,92 @@ namespace EFCore.Migrations
                         principalTable: "PaymentAlternatives",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "BarberShops",
+                columns: new[] { "Id", "Name", "OpeningHours" },
+                values: new object[] { 1, "The Cut-Algorithm", "Mon-Fri 09:00-18:00" });
+
+            migrationBuilder.InsertData(
+                table: "PaymentAlternatives",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Card-Payment" },
+                    { 2, "Swish" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "admin" },
+                    { 2, "customer" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Services",
+                columns: new[] { "Id", "Description", "Duration", "Name", "Price" },
+                values: new object[,]
+                {
+                    { 1, "Classic haircut including wash.", "60 min", "Classic haircut and styling", 550m },
+                    { 2, "Shaping with machine and razor", "60 min", "Trimming and shaping of beard with machine and shears", 350m },
+                    { 3, "Haircut, beard, and hot towel.", "60 min", "Haircut and beard trim including a hot towel treatment", 850m },
+                    { 4, "Simple all-over clipper cut with neck shave.", "60 min", "Buzz Cut", 250m }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "CreatedAt", "Name", "UserName" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2026, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin Bosse", "admin" },
+                    { 2, new DateTime(2026, 2, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "Erik Karlsson", "erik90" },
+                    { 3, new DateTime(2026, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Anna Svensson", "anna_s" },
+                    { 4, new DateTime(2026, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Karl Larsson", "kalle" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Customers",
+                columns: new[] { "Id", "BirthDate", "Name", "RoleId", "UserId" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(1990, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Erik Karlsson", 2, 2 },
+                    { 2, new DateTime(1985, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "Anna Svensson", 2, 3 },
+                    { 3, new DateTime(2000, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Karl Larsson", 2, 4 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "Id", "BarberShopId", "Name", "Price" },
+                values: new object[,]
+                {
+                    { 1, 1, "Matte Hair Wax", 149.00m },
+                    { 2, 1, "Beard Oil Deluxe", 199.00m },
+                    { 3, 1, "Aftershave Eucalyptus", 129.00m },
+                    { 4, 1, "Professional Comb", 89.00m }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Appointments",
+                columns: new[] { "Id", "CustomerId", "DateTime" },
+                values: new object[,]
+                {
+                    { 1, 1, new DateTime(2026, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, 2, new DateTime(2026, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, 3, new DateTime(2026, 5, 3, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Orders",
+                columns: new[] { "Id", "AppointmentId", "CustomerId", "OrderDate", "PaymentAlternativeId", "TotalAmount" },
+                values: new object[,]
+                {
+                    { 1, 1, null, new DateTime(2025, 12, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 550m },
+                    { 2, 2, null, new DateTime(2026, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 350m },
+                    { 3, 3, null, new DateTime(2026, 3, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 850m }
                 });
 
             migrationBuilder.CreateIndex(

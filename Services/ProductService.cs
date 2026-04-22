@@ -6,11 +6,16 @@ using System.Text;
 
 namespace Services
 {
-    internal class ProductService(IProductRepository productRepository) : IProductService
+    public class ProductService(IProductRepository productRepository) : IProductService
     {
-        //public async Task<Product> GetProductByIdAsync()
-        //{
-        //    return await
-        //}
+        public async Task AddProductsAsync(Product productId)
+        {
+            await productRepository.AddProductsAsync(productId);
+        }
+
+        public async Task<List<Product>> GetAllProductsAsync()
+        {
+            return await productRepository.GetAllProductsAsync();
+        }
     }
 }

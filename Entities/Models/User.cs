@@ -9,7 +9,7 @@ namespace Entities.Models
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string UserName { get; set; } = null!;
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public Customer? Customer { get; set; }
     }
 }

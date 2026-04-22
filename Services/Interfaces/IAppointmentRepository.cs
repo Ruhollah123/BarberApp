@@ -7,6 +7,8 @@ namespace Services.Interfaces
 {
     public interface IAppointmentRepository
     {
-        Task<Appointment> AddAppointmentsByIdAsync(Appointment appointment);
+        Task<Appointment> AddAppointmentsAsync(Appointment appointment);
+        Task<List<Appointment>> GetAllAppointmentsAsync();
+        Task DeleteAppointmentsAsync(int id);
     }
 }

@@ -1,5 +1,8 @@
 ﻿using BarberApp.Pages;
+using EFCore;
+using EFCore.Repositories;
 using Entities.Models;
+using Services;
 
 namespace BarberApp
 {
@@ -7,7 +10,11 @@ namespace BarberApp
     {
         public Page Page { get; set; }
         public static User? CurrentUser { get; set; }
+        public List<Product> SelectedProducts { get; set; } = new List<Product>();
+        public List<Appointment> SelectedAppointments { get; set; } = new List<Appointment>();
+        public Service service { get; set; }
 
+        public readonly BarberAppDbContext _context = new();
         public App()
         {
 
@@ -47,6 +54,11 @@ namespace BarberApp
 
         private async Task ChangePage(ChangePageRequest changePageRequest)
         {
+            var servicesService = new ServicesService(new ServicesRepository(_context));
+            var productsService = new ProductService(new ProductRepository(_context));
+            var appointmentService = new Services.AppointmentService(new AppointmentRepository(_context));
+            var orderService = new OrderService(new OrderRepository(_context));
+
             switch (changePageRequest.Page)
             {
                 case "Home":
@@ -54,23 +66,23 @@ namespace BarberApp
                     break;
 
                 case "Services":
-                    Page = new ServicePage();
+                    Page = new ServicePage(servicesService, SelectedAppointments);
                     break;
 
                 case "Booking-appointment":
-                    Page = new BookingPage();
+
+                    Page = new BookingPage(appointmentService, SelectedAppointments, service);
                     break;
 
                 case "Products":
-                    Page = new ProductsPage();
+                    Page = new ProductsPage(productsService, SelectedProducts);
                     break;
 
                 case "Cart-page":
-                    Page = new CartPage();
+                    Page = new CartPage(SelectedProducts, SelectedAppointments);
                     switch (changePageRequest.Action)
                     {
                         case RequestAction.Get:
-
                             break;
                     }
                     break;
@@ -80,7 +92,7 @@ namespace BarberApp
                     break;
 
                 case "admin":
-                    Page = new AdminPage();
+                    Page = new AdminPage(productsService, servicesService);
                     break;
                 default:
 

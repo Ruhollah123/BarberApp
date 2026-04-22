@@ -39,7 +39,6 @@
 
         public override void Draw()
         {
-            //Console.Clear();
             int positionX = X;
             int positionY = Y;
 
@@ -71,10 +70,6 @@
             if (App.CurrentUser == null)
             {
                 menuContent.Add("5. Log in");
-            }
-            else
-            {
-                menuContent.Add("6. Log out");
             }
 
             theMenu.Draw();

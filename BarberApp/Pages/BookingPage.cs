@@ -1,9 +1,25 @@
-﻿namespace BarberApp.Pages
+﻿using Entities.Models;
+using Services.Interfaces;
+
+namespace BarberApp.Pages
 {
     internal class BookingPage : Page
     {
         private bool isBooking = false;
         public bool SelectMode { get; set; }
+        private readonly IAppointmentService _service;
+        private List<Appointment> _appointments;
+        private Service? _selectedServiceId;
+
+
+
+        public BookingPage(IAppointmentService appointmentService, List<Appointment> appointments, Service selectedServiceId)
+        {
+            _service = appointmentService;
+            _appointments = appointments;
+            _selectedServiceId = selectedServiceId;
+        }
+
         public override ChangePageRequest ChangePage()
         {
             if (SelectMode)
@@ -12,7 +28,6 @@
             }
 
             return new ChangePageRequest() { Page = "Booking-appointment" };
-
         }
 
         public override void Draw()
@@ -26,15 +41,15 @@
 
             List<string> scheduleInfo = new List<string>();
 
-            scheduleInfo.Add("Time  |    Mon |    Tue   |     Wed    |    Thu   |     Fri ");
-            scheduleInfo.Add("--------------------------------------------------------------");
+            scheduleInfo.Add("Time  |    Mon (27 apr) |    Tue (28 apr)   |     Wed(29 apr)    |    Thu(30 apr)   |     Fri(1 maj) ");
+            scheduleInfo.Add("-----------------------------------------------------------------------------------------------------");
 
             for (int hour = 9; hour <= 15; hour++)
             {
                 string hourString = hour.ToString().PadLeft(2);
-
                 string row = $"{hourString}:00 |";
-                row += " [FREE] |   [FREE] |   [BOOKED] |   [FREE] |   [BOOKED]";
+
+                row += "     [FREE]          |   [FREE]       |       [BOOKED]       |   [FREE]      |      [BOOKED]";
                 scheduleInfo.Add(row);
             }
 
@@ -53,20 +68,6 @@
                 Console.WriteLine("Enter B to book an apointment");
                 Console.WriteLine("Enter C to go back to menu");
             }
-            else
-            {
-                Console.WriteLine("--- BOOKING-MODE ---");
-                Console.Write("Enter day: ");
-                var dayEntered = Console.ReadLine();
-
-                Console.Write("Enter Time: ");
-                var timeEntered = Console.ReadLine();
-
-                Console.WriteLine("Time Booked!");
-                Console.WriteLine("\nEnter B to book another appointment");
-                Console.WriteLine("Enter C to go back to menu");
-
-            }
         }
         public override void ManageInput()
         {
@@ -75,8 +76,7 @@
             {
                 if (key.Key == ConsoleKey.B)
                 {
-                    isBooking = true;
-                    ShouldChangePage = false;
+                    SelectedAppointment();
                 }
                 else if (key.Key == ConsoleKey.C)
                 {
@@ -94,5 +94,34 @@
                 }
             }
         }
+
+        private void SelectedAppointment()
+        {
+            Console.WriteLine("\n--- BOOKING-MODE ---");
+            Console.Write("Enter day: ");
+            var dayEntered = Console.ReadLine();
+
+            Console.Write("Enter Time: ");
+            var timeEntered = Console.ReadLine();
+
+            if (DateTime.TryParse($"{dayEntered} {timeEntered}", out DateTime bookedDate))
+            {
+                var newAppointment = _service.AddAppointmentsAsync(1, bookedDate).Result;
+
+                if (newAppointment != null)
+                {
+                    _appointments.Add(newAppointment);
+                    Console.WriteLine($"Service: {_selectedServiceId} Added To Cart");
+                }
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine("Invalid date format");
+                Console.WriteLine("Enter any key to continue");
+                Console.ReadKey();
+            }
+        }
+
     }
 }

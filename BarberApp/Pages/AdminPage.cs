@@ -1,35 +1,29 @@
-﻿namespace BarberApp.Pages
+﻿using Entities.Models;
+using Services.Interfaces;
+
+namespace BarberApp.Pages
 {
-    internal class AdminPage : Page
+    internal class AdminPage(IProductService productService, IServicesService servicesService) : Page
     {
         public bool AddMode { get; set; }
         public bool SelectMode { get; set; }
+        public List<Product> Products { get; set; } = new List<Product>();
+        public User User { get; set; }
 
         private List<string> thingsToAdd = new List<string>()
         {
-                "1. Add Products",
-                "2. Manage User",
-                "3. Update Schedule",
-                "4. Back to menu",
+                "1. Add A Product",
+                "2. Add A Service",
+                "3. Manage User",
+                "4. Update Schedule",
+                "5. Back to menu",
         };
 
         public override ChangePageRequest ChangePage()
         {
-            if (AddMode)
-            {
-                return new ChangePageRequest() { Page = "Add-product" };
-            }
-            else if (SelectMode)
-            {
-                return new ChangePageRequest() { Page = "Manage-User" };
-            }
-            else if (!AddMode && !SelectMode)
+            if (!AddMode && !SelectMode)
             {
                 return new ChangePageRequest() { Page = "Home" };
-            }
-            else
-            {
-                return new ChangePageRequest() { Page = "Update-schedule" };
             }
 
             return null;
@@ -59,42 +53,133 @@
 
         public override void ManageInput()
         {
-            var key = Console.ReadKey(true).KeyChar;
-
-            if (int.TryParse(key.ToString(), out int input))
+            char choice = Console.ReadKey().KeyChar;
+            switch (choice)
             {
-                input -= 1;
+                case '1':
+                    AddProducts();
+                    break;
 
-                if (input <= thingsToAdd.Count && input >= 0)
-                {
+                case '2':
+                    AddServices();
+                    break;
+
+                case '3':
+                    ManageUser();
+                    break;
+
+                case '4':
+                    ManageSchedule();
+                    break;
+
+                case '5':
+                    AddMode = false;
+                    SelectMode = false;
                     ShouldChangePage = true;
-                }
+                    break;
+            }
+        }
+
+
+        private void AddProducts()
+        {
+            Console.Clear();
+            Console.WriteLine("---ADDING PRODUCT ---");
+
+            Console.Write("\nEnter Product Name: ");
+            var newProduct = Console.ReadLine();
+
+            Console.Write("Enter Price: ");
+            if (decimal.TryParse(Console.ReadLine(), out decimal productPrice))
+            {
+                var product = new Product { Name = newProduct!, Price = productPrice, BarberShopId = 1 };
+                productService.AddProductsAsync(product).Wait();
+                Console.WriteLine("Product added!");
+            }
+
+            Console.WriteLine("Enter any key to go back to menu");
+            Console.ReadKey();
+        }
+
+        private void AddServices()
+        {
+            Console.Clear();
+            Console.WriteLine("---ADDING SERVICE ---");
+
+            Console.Write("\nEnter Name: ");
+            var serviceName = Console.ReadLine();
+
+            Console.Write("Enter Descrption: ");
+            var nameOfDescription = Console.ReadLine();
+
+            Console.Write("How long does it take: ");
+            var durationTime = Console.ReadLine();
+
+            Console.Write("How much does it cost: ");
+            if (decimal.TryParse(Console.ReadLine(), out decimal theCost))
+            {
+                var service = new Service { Name = serviceName, Description = nameOfDescription, Duration = durationTime, Price = theCost };
+                servicesService.AddServicesAsync(service);
+
+                Console.WriteLine("Service added!");
+            }
+
+
+            Console.WriteLine("New Service Added!");
+            Console.WriteLine("Enter any key to go back to menu");
+            Console.ReadKey();
+        }
+
+        private void ManageUser()
+        {
+            Console.Clear();
+            Console.WriteLine("--- MANAGING USERS ---");
+
+            Console.Write("\nEnter Name: ");
+            var userName = Console.ReadLine();
+
+            Console.Write("Enter A Unique Username: ");
+            var uniqueName = Console.ReadLine();
+
+            Console.WriteLine("Enter Registration Date (YYYY-MM-DD): ");
+
+            if (DateTime.TryParse(Console.ReadLine(), out DateTime userDate))
+            {
+                User.CreatedAt = userDate;
             }
             else
             {
-                char choice = char.ToUpper(key);
-                switch (choice)
-                {
-                    case '1':
-                        AddMode = true;
-                        ShouldChangePage = true;
-                        break;
-                    case '2':
-                        SelectMode = true;
-                        ShouldChangePage = true;
-                        break;
-
-                    case '3':
-                        SelectMode = true;
-                        ShouldChangePage = true;
-                        break;
-                    case '4':
-                        AddMode = false;
-                        SelectMode = false;
-                        ShouldChangePage = true;
-                        break;
-                }
+                Console.WriteLine("Today's date will be set");
+                User.CreatedAt = DateTime.Now;
             }
+
+            Console.WriteLine("New User Added!");
+            Console.WriteLine("Enter any key to go back to menu");
+            Console.ReadKey();
+        }
+
+        private void ManageSchedule()
+        {
+            Console.Clear();
+            Console.WriteLine("--- MANAGING SCHEDULE ---");
+
+            Console.WriteLine("\n");
+
+            List<string> scheduleInfo = new List<string>();
+
+            scheduleInfo.Add("Time  |    Mon |    Tue   |     Wed    |    Thu   |     Fri ");
+            scheduleInfo.Add("--------------------------------------------------------------");
+
+            for (int hour = 9; hour <= 15; hour++)
+            {
+                string hourString = hour.ToString().PadLeft(2);
+
+                string row = $"{hourString}:00 |";
+                row += " [FREE] |   [FREE] |   [BOOKED] |   [FREE] |   [BOOKED]";
+                scheduleInfo.Add(row);
+            }
+            Console.ReadKey();
+
         }
     }
 }

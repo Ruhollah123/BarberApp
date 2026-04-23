@@ -7,17 +7,22 @@ namespace BarberApp.Pages
     {
         public bool AddMode { get; set; }
         public List<Product> Products { get; set; } = new List<Product>();
+        public List<Appointment> Appointments { get; set; } = new List<Appointment>();
         private readonly IProductService _productService;
+        private readonly IAppointmentService _appointmentService;
         private List<Product> _products;
         private List<Appointment> _appointments;
 
 
-        public ProductsPage(IProductService service, List<Product> products, List<Appointment> apointments)
+        public ProductsPage(IProductService service, IAppointmentService appointmentService, List<Product> products, List<Appointment> apointments)
         {
             _productService = service;
             _products = products;
             _appointments = apointments;
+            _appointmentService = appointmentService;
+
             Products = _productService.GetAllProductsAsync().Result;
+            Appointments = _appointmentService.GetAllAppointmentsAsync().Result;
         }
 
         public override ChangePageRequest ChangePage()
@@ -112,28 +117,32 @@ namespace BarberApp.Pages
             switch (key)
             {
                 case 'X':
-                    var topProduct = _products
+                    var freshProducts = _productService.GetAllProductsAsync().Result;
+                    var topProduct = freshProducts
                         .GroupBy(p => p.Name)
                         .OrderByDescending(g => g.Count())
                         .Select(g => new { Name = g.Key, Amount = g.Count() })
                         .FirstOrDefault();
-                    Console.WriteLine($"Most Sold Product: {topProduct?.Name} ({topProduct?.Amount} units)");
+                    Console.WriteLine($"\nMost Sold Product: {topProduct?.Name} ({topProduct?.Amount} units)");
                     Console.ReadKey();
                     break;
 
                 case 'K':
-                    decimal totalRevenu = _products.Sum(p => p.Price);
-                    Console.WriteLine($"Total Revenue: {totalRevenu} kr.");
+                    var productsRevenue = _productService.GetAllProductsAsync().Result;
+
+                    decimal totalRevenu = productsRevenue.Sum(p => p.Price);
+                    Console.WriteLine($"\nTotal Revenue: {totalRevenu} kr.");
                     Console.ReadKey();
                     break;
 
                 case 'P':
+                    var appointmentsHours = _appointmentService.GetAllAppointmentsAsync().Result;
                     var busyHour = _appointments
                         .GroupBy(a => a.DateTime.Hour)
                         .OrderByDescending(g => g.Count())
                         .Select(g => new { Hour = g.Key, Count = g.Count() })
                         .FirstOrDefault();
-                    Console.WriteLine($"Busiest Time: {busyHour?.Hour}:00 ({busyHour?.Count} bookings)");
+                    Console.WriteLine($"\nBusiest Time: {busyHour?.Hour}:00 ({busyHour?.Count} bookings)");
                     Console.ReadKey();
                     break;
 

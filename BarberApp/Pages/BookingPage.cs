@@ -10,9 +10,7 @@ namespace BarberApp.Pages
         private readonly IAppointmentService _service;
         private List<Appointment> _appointments;
         private Service? _selectedServiceId;
-
-
-
+        public int weekOffset = 0;
         public BookingPage(IAppointmentService appointmentService, List<Appointment> appointments, Service selectedServiceId)
         {
             _service = appointmentService;
@@ -40,21 +38,39 @@ namespace BarberApp.Pages
             int paddingY = 7;
 
             List<string> scheduleInfo = new List<string>();
+            DateTime baseMonday = new DateTime(2026, 4, 27);
+            DateTime currentMonday = baseMonday.AddDays(weekOffset * 7);
+            string header = "Time       ";
 
-            scheduleInfo.Add("Time  |    Mon (27 apr) |    Tue (28 apr)   |     Wed(29 apr)    |    Thu(30 apr)   |     Fri(1 maj) ");
-            scheduleInfo.Add("-----------------------------------------------------------------------------------------------------");
+            for (int i = 0; i < 5; i++)
+            {
+                DateTime day = currentMonday.AddDays(i);
+                header += $" {day.ToString("ddd (d MM)      ", System.Globalization.CultureInfo.InvariantCulture)}";
+            }
+            scheduleInfo.Add(header);
+            scheduleInfo.Add(new string('-', 95));
+
 
             for (int hour = 9; hour <= 15; hour++)
             {
                 string hourString = hour.ToString().PadLeft(2);
                 string row = $"{hourString}:00 |";
 
-                row += "     [FREE]          |   [FREE]       |       [BOOKED]       |   [FREE]      |      [BOOKED]";
+                for (int dayOffset = 0; dayOffset < 5; dayOffset++)
+                {
+                    DateTime checkDate = currentMonday.AddDays(dayOffset);
+                    bool isBooked = _appointments.Any(a => a.DateTime.Date == checkDate.Date && a.DateTime.Hour == hour);
+
+                    string status = isBooked ? "       [BOOKED]" : "       [FREE]";
+                    row += $"{status}    |";
+                }
+
                 scheduleInfo.Add(row);
             }
 
             Window scheduleWindow = new Window("Schedule", X, Y, scheduleInfo);
             scheduleWindow.Draw();
+            
             nextX += scheduleWindow.WindowWidth + 2;
 
             if (nextX + scheduleWindow.WindowWidth > Width)
@@ -62,11 +78,10 @@ namespace BarberApp.Pages
                 nextX = 0;
                 nextY += paddingY;
             }
-
             if (!isBooking)
             {
-                Console.WriteLine("Enter B to book an apointment");
-                Console.WriteLine("Enter C to go back to menu");
+                Console.WriteLine("[F] Next Week | [K] Last Week");
+                Console.WriteLine("Enter [B] To Book An Appoinntment | Enter C to go back to menu");
             }
         }
         public override void ManageInput()
@@ -82,6 +97,16 @@ namespace BarberApp.Pages
                 {
                     SelectMode = true;
                     ShouldChangePage = true;
+                }
+                else if (key.Key == ConsoleKey.F)
+                {
+                    weekOffset++;
+                    Draw();
+                }
+                else if (key.Key == ConsoleKey.K)
+                {
+                    weekOffset--;
+                    Draw();
                 }
             }
             else

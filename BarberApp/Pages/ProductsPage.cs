@@ -1,6 +1,5 @@
 ﻿using Entities.Models;
 using Services.Interfaces;
-using System.Runtime.InteropServices;
 
 namespace BarberApp.Pages
 {
@@ -10,12 +9,14 @@ namespace BarberApp.Pages
         public List<Product> Products { get; set; } = new List<Product>();
         private readonly IProductService _productService;
         private List<Product> _products;
+        private List<Appointment> _appointments;
 
-        public ProductsPage(IProductService service, List<Product> products)
+
+        public ProductsPage(IProductService service, List<Product> products, List<Appointment> apointments)
         {
             _productService = service;
             _products = products;
-
+            _appointments = apointments;
             Products = _productService.GetAllProductsAsync().Result;
         }
 
@@ -59,6 +60,7 @@ namespace BarberApp.Pages
             }
 
             Console.WriteLine("Enter A to add products to cart");
+            Console.WriteLine("Enter B to view statistics");
             Console.WriteLine("Enter C to go back to menu");
         }
 
@@ -84,6 +86,11 @@ namespace BarberApp.Pages
                         AddMode = true;
                         ShouldChangePage = false;
                         break;
+                    case 'B':
+                        ShowStatistics();
+                        AddMode = true;
+                        ShouldChangePage = false;
+                        break;
                     case 'C':
                         AddMode = false;
                         ShouldChangePage = true;
@@ -92,6 +99,48 @@ namespace BarberApp.Pages
                         break;
                 }
             }
+        }
+
+        private void ShowStatistics()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter X To View Most Sold Product");
+            Console.WriteLine("Enter K To View Total Revenue");
+            Console.WriteLine("Enter P To View Busiest hours ");
+
+            var key = char.ToUpper(Console.ReadKey(true).KeyChar);
+            switch (key)
+            {
+                case 'X':
+                    var topProduct = _products
+                        .GroupBy(p => p.Name)
+                        .OrderByDescending(g => g.Count())
+                        .Select(g => new { Name = g.Key, Amount = g.Count() })
+                        .FirstOrDefault();
+                    Console.WriteLine($"Most Sold Product: {topProduct?.Name} ({topProduct?.Amount} units)");
+                    Console.ReadKey();
+                    break;
+
+                case 'K':
+                    decimal totalRevenu = _products.Sum(p => p.Price);
+                    Console.WriteLine($"Total Revenue: {totalRevenu} kr.");
+                    Console.ReadKey();
+                    break;
+
+                case 'P':
+                    var busyHour = _appointments
+                        .GroupBy(a => a.DateTime.Hour)
+                        .OrderByDescending(g => g.Count())
+                        .Select(g => new { Hour = g.Key, Count = g.Count() })
+                        .FirstOrDefault();
+                    Console.WriteLine($"Busiest Time: {busyHour?.Hour}:00 ({busyHour?.Count} bookings)");
+                    Console.ReadKey();
+                    break;
+
+                default:
+                    break;
+            }
+
         }
 
         private void SelectedProduct()

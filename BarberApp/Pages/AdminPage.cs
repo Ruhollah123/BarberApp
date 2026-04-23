@@ -145,6 +145,7 @@ namespace BarberApp.Pages
 
             if (DateTime.TryParse(Console.ReadLine(), out DateTime userDate))
             {
+                User = new User();
                 User.CreatedAt = userDate;
             }
             else

@@ -134,7 +134,7 @@ namespace BarberApp.Pages
             {
                 foreach (var item in SelectedAppointments)
                 {
-                    Console.WriteLine($"\n#{item.CustomerId}# Date: {item.DateTime.ToString("g")} Adress: Storgatan 1, Uddevalla 451 40");
+                    Console.WriteLine($"\n#{item.CustomerId} Date: {item.DateTime.ToString("g")} Address: Storgatan 1, Uddevalla 451 40");
                     Console.WriteLine("------------------------------------");
                 }
 

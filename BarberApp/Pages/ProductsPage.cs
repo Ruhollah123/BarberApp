@@ -7,22 +7,18 @@ namespace BarberApp.Pages
     {
         public bool AddMode { get; set; }
         public List<Product> Products { get; set; } = new List<Product>();
+        private List<Product> _cart;
         public List<Appointment> Appointments { get; set; } = new List<Appointment>();
         private readonly IProductService _productService;
         private readonly IAppointmentService _appointmentService;
-        private List<Product> _products;
         private List<Appointment> _appointments;
 
-
-        public ProductsPage(IProductService service, IAppointmentService appointmentService, List<Product> products, List<Appointment> apointments)
+        public ProductsPage(IProductService service, IAppointmentService appointmentService, List<Product> cart, List<Appointment> apointments)
         {
             _productService = service;
-            _products = products;
-            _appointments = apointments;
+            _cart= cart;
+            Appointments = apointments;
             _appointmentService = appointmentService;
-
-            Products = _productService.GetAllProductsAsync().Result;
-            Appointments = _appointmentService.GetAllAppointmentsAsync().Result;
         }
 
         public override ChangePageRequest ChangePage()
@@ -34,10 +30,16 @@ namespace BarberApp.Pages
             return null;
         }
 
-        public override void Draw()
+        public override async void Draw()
         {
             Console.Clear();
 
+            if (Products.Count == 0)
+            {
+                Products = await _productService.GetAllProductsAsync();
+                Appointments = await _appointmentService.GetAllAppointmentsAsync();
+
+            }
             int nextX = 0;
             int nextY = 0;
 
@@ -63,13 +65,12 @@ namespace BarberApp.Pages
                 }
 
             }
-
             Console.WriteLine("Enter A to add products to cart");
             Console.WriteLine("Enter B to view statistics");
             Console.WriteLine("Enter C to go back to menu");
         }
 
-        public override void ManageInput()
+        public override async void ManageInput()
         {
             var key = Console.ReadKey(true).KeyChar;
             if (int.TryParse(key.ToString(), out int productInput))
@@ -83,8 +84,7 @@ namespace BarberApp.Pages
             }
             else
             {
-                char optionChosen = char.ToUpper(key);
-                switch (optionChosen)
+                switch (char.ToUpper(key))
                 {
                     case 'A':
                         SelectedProduct();
@@ -92,8 +92,7 @@ namespace BarberApp.Pages
                         ShouldChangePage = false;
                         break;
                     case 'B':
-                        ShowStatistics();
-                        AddMode = true;
+                        await ShowStatistics();
                         ShouldChangePage = false;
                         break;
                     case 'C':
@@ -106,8 +105,9 @@ namespace BarberApp.Pages
             }
         }
 
-        private void ShowStatistics()
+        private async Task ShowStatistics()
         {
+
             Console.Clear();
             Console.WriteLine("Enter X To View Most Sold Product");
             Console.WriteLine("Enter K To View Total Revenue");
@@ -117,18 +117,18 @@ namespace BarberApp.Pages
             switch (key)
             {
                 case 'X':
-                    var freshProducts = _productService.GetAllProductsAsync().Result;
+                    Console.Clear();
+                    var freshProducts = await _productService.GetAllProductsAsync();
                     var topProduct = freshProducts
                         .GroupBy(p => p.Name)
                         .OrderByDescending(g => g.Count())
                         .Select(g => new { Name = g.Key, Amount = g.Count() })
                         .FirstOrDefault();
                     Console.WriteLine($"\nMost Sold Product: {topProduct?.Name} ({topProduct?.Amount} units)");
-                    Console.ReadKey();
                     break;
 
                 case 'K':
-                    var productsRevenue = _productService.GetAllProductsAsync().Result;
+                    var productsRevenue = await _productService.GetAllProductsAsync();
 
                     decimal totalRevenu = productsRevenue.Sum(p => p.Price);
                     Console.WriteLine($"\nTotal Revenue: {totalRevenu} kr.");
@@ -136,8 +136,8 @@ namespace BarberApp.Pages
                     break;
 
                 case 'P':
-                    var appointmentsHours = _appointmentService.GetAllAppointmentsAsync().Result;
-                    var busyHour = _appointments
+                    var appointmentsHours = await _appointmentService.GetAllAppointmentsAsync();
+                    var busyHour = appointmentsHours
                         .GroupBy(a => a.DateTime.Hour)
                         .OrderByDescending(g => g.Count())
                         .Select(g => new { Hour = g.Key, Count = g.Count() })
@@ -161,7 +161,7 @@ namespace BarberApp.Pages
 
                 if (product != null)
                 {
-                    _products.Add(product);
+                    _cart.Add(product);
                     Console.WriteLine($"\n{product.Name} Added To Cart!");
                 }
                 else

@@ -19,8 +19,6 @@ namespace BarberApp.Pages
         {
             _serviceService = service;
             SelectedAppointments = appointments;
-
-            Services = _serviceService.GetAllServicesAsync().Result;
         }
         public override ChangePageRequest ChangePage()
         {
@@ -39,11 +37,12 @@ namespace BarberApp.Pages
             }
         }
 
-        public override void Draw()
+        public override async void Draw()
         {
             Console.Clear();
             int nextX = 0;
             int nextY = 0;
+            Services = await _serviceService.GetAllServicesAsync();
 
             for (int i = 0; i < Services.Count; i++)
             {
@@ -74,7 +73,7 @@ namespace BarberApp.Pages
 
         public override void ManageInput()
         {
-            var key = Console.ReadKey(true).KeyChar;
+            var key = char.ToUpper(Console.ReadKey(true).KeyChar);
 
             if (SelectMode && int.TryParse(key.ToString(), out int input))
             {
@@ -88,8 +87,7 @@ namespace BarberApp.Pages
             }
             else
             {
-                char choice = char.ToUpper(key);
-                switch (choice)
+                switch (key)
                 {
                     case 'A':
                         HandleServiceSelection();

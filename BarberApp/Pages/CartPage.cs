@@ -51,7 +51,7 @@ namespace BarberApp.Pages
 
             foreach (var product in SelectedProducts)
             {
-                showCart.Add($"{product.Name} - {product.Price} kr");
+                showCart.Add($"Product: {product.Name} - {product.Price} kr");
                 total += product.Price;
             }
 
@@ -114,10 +114,6 @@ namespace BarberApp.Pages
 
                 Console.Write("Enter your CVC-number: ");
                 var cvcNumber = Console.ReadLine();
-
-                Console.WriteLine("Payment Succeeded!");
-                Console.WriteLine("\nPress any key to continue.");
-                Console.ReadKey();
             }
             else if (input == '2')
             {

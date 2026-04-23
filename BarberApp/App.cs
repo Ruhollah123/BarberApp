@@ -75,7 +75,7 @@ namespace BarberApp
                     break;
 
                 case "Products":
-                    Page = new ProductsPage(productsService, appointmentService ,SelectedProducts, SelectedAppointments);
+                    Page = new ProductsPage(productsService, appointmentService, SelectedProducts, SelectedAppointments);
                     break;
 
                 case "Cart-page":

@@ -120,7 +120,7 @@ namespace BarberApp.Pages
             }
         }
 
-        private void SelectedAppointment()
+        private async void SelectedAppointment()
         {
             Console.WriteLine("\n--- BOOKING-MODE ---");
             Console.Write("Enter day: ");
@@ -131,14 +131,13 @@ namespace BarberApp.Pages
 
             if (DateTime.TryParse($"{dayEntered} {timeEntered}", out DateTime bookedDate))
             {
-                var newAppointment = _service.AddAppointmentsAsync(1, bookedDate).Result;
+                var newAppointment = await _service.AddAppointmentsAsync(1, bookedDate);
 
                 if (newAppointment != null)
                 {
                     _appointments.Add(newAppointment);
                     Console.WriteLine($"Service: {_selectedServiceId} Added To Cart");
                 }
-                Console.ReadKey();
             }
             else
             {
